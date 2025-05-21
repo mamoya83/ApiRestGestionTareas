@@ -1,5 +1,7 @@
 package com.marcos.gestionTareas.controllers;
 
+import com.marcos.gestionTareas.dto.req.ProyectoRequestDto;
+import com.marcos.gestionTareas.dto.res.ResponseGlobalDto;
 import com.marcos.gestionTareas.models.Proyecto;
 import com.marcos.gestionTareas.services.ProyectoService;
 import org.springframework.http.ResponseEntity;
@@ -19,44 +21,34 @@ public class ProyectoController {
 
     //Metodo para obtener todos los proyectos
     @GetMapping
-    public ResponseEntity<List<Proyecto>> getAllProyectos(){
-        List<Proyecto> proyectos = proyectoService.getAllProyectos();
-        return ResponseEntity.ok(proyectos);
+    public ResponseEntity<ResponseGlobalDto> getAllProyectos(){
+        ResponseGlobalDto rspuesta = proyectoService.getAllProyectos();
+        return ResponseEntity.ok(rspuesta);
     }
     //Metodo para obtener proyecto por id
     @GetMapping("/{id}")
-    public ResponseEntity<Proyecto>getProyectoById(@PathVariable Long id){
-        Optional<Proyecto>proyectoObt = proyectoService.getProyectoById(id);
-        if(proyectoObt.isPresent()){
-            return ResponseEntity.ok(proyectoObt.get());
-        }else{
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<ResponseGlobalDto>getProyectoById(@PathVariable Long id){
+        ResponseGlobalDto respuesta = proyectoService.getProyectoById(id);
+            return ResponseEntity.status(respuesta.getCodigo()).body(respuesta);
         }
-    }
     //Metodo para crear un proyecto
     @PostMapping
-    public ResponseEntity<Proyecto> createProyecto(@RequestBody Proyecto proyecto){
-        Proyecto proyectoNuv = proyectoService.createProyecto(proyecto);
-        return ResponseEntity.ok(proyectoNuv);
+    public ResponseEntity<ResponseGlobalDto> createProyecto(@RequestBody ProyectoRequestDto proyectoDto){
+        ResponseGlobalDto respuesta = proyectoService.createProyecto(proyectoDto);
+        return ResponseEntity.status(respuesta.getCodigo()).body(respuesta);
     }
     //Metod para actualizar un proyecto
     @PutMapping("/{id}")
-    public ResponseEntity<Proyecto> updateProyecto(@PathVariable Long id,@RequestBody Proyecto proyectoObt){
-       Optional<Proyecto> proyectoAct = proyectoService.updateProyecto(id, proyectoObt);
-       if(proyectoAct.isPresent()){
-           return ResponseEntity.ok(proyectoAct.get());
-       }else{
-           return ResponseEntity.notFound().build();
+    public ResponseEntity<ResponseGlobalDto> updateProyecto(@PathVariable Long id,@RequestBody ProyectoRequestDto proyectoDto){
+        Proyecto proyecto = new Proyecto();
+       ResponseGlobalDto respuesta = proyectoService.updateProyecto(id, proyectoDto);
+           return ResponseEntity.status(respuesta.getCodigo()).body(respuesta);
        }
-    }
+
     //Metodo para eliminar un proyecto
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProyecto(@PathVariable Long id){
-        boolean eliminado = proyectoService.deleteProyecto(id);
-        if (eliminado){
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ResponseGlobalDto> deleteProyecto(@PathVariable Long id) {
+        ResponseGlobalDto respuesta = proyectoService.deleteProyecto(id);
+        return ResponseEntity.status(respuesta.getCodigo()).body(respuesta);
     }
 }

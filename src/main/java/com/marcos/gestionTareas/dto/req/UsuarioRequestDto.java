@@ -1,32 +1,16 @@
-package com.marcos.gestionTareas.models;
+package com.marcos.gestionTareas.dto.req;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+public class UsuarioRequestDto {
 
-import java.util.List;
-
-
-@Entity
-@Table(name = "usuarios")
-public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario",nullable = false)
     private Long id;
-    @Column(name = "nombre",nullable = false,length = 50)
     private String name;
-    @Column(name = "apellido",nullable = false,length = 50)
     private String lastname;
-    @Column(name = "email",nullable = false,length = 40)
     private String email;
-    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Proyecto>proyectos;
 
-    public Usuario() {
+    public UsuarioRequestDto() {
     }
 
-    public Usuario(Long id, String name, String lastname, String email) {
+    public UsuarioRequestDto(Long id, String name, String lastname, String email) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
